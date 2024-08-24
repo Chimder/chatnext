@@ -47,8 +47,10 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   }, [channelID, podchannelID]);
 
+  const url = process.env.NEXT_PUBLIC_DB_URL;
   useEffect(() => {
-    const newSocket = new WebSocket("ws://localhost:4000/ws");
+    const websocketUrl = url?.replace(/^http/, "ws");
+    const newSocket = new WebSocket(`${websocketUrl}/ws`);
     newSocket.onopen = () => {
       setIsConnected(true);
     };
@@ -81,7 +83,7 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const sendJoinUser = (channelID: string) => {
     if (socket) {
-      socket.send(
+      socket?.send(
         JSON.stringify({
           event: "join_podchannel",
           channel_id: Number(channelID),

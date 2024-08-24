@@ -1,24 +1,24 @@
-import Axios, { AxiosError, AxiosRequestConfig } from 'axios'
+import Axios, { AxiosError, AxiosRequestConfig } from "axios";
 
-// const url = process.env.NEXT_PUBLIC_API
+const url = process.env.DB_URL;
 export const AXIOS_INSTANCE = Axios.create({
-  baseURL: 'http://localhost:4000',
-  // baseURL: url?.toString(),
+  // baseURL: "http://localhost:4000",
+  baseURL: url?.toString(),
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
-}) // use your own URL here or environment variable
+}); // use your own URL here or environment variable
 
 export const customInstance = <T>(
   config: AxiosRequestConfig,
-  options?: AxiosRequestConfig,
+  options?: AxiosRequestConfig
 ): Promise<T> => {
   // const source = Axios.CancelToken.source();
   return AXIOS_INSTANCE({
     ...config,
     ...options,
     // cancelToken: source.token,
-  }).then(({ data }) => data)
+  }).then(({ data }) => data);
 
   // @ts-ignore
   // promise.cancel = () => {
@@ -26,8 +26,8 @@ export const customInstance = <T>(
   // };
 
   // return promise;
-}
+};
 
-export type ErrorType<Error> = AxiosError<Error>
+export type ErrorType<Error> = AxiosError<Error>;
 
-export type BodyType<Data> = Data
+export type BodyType<Data> = Data;

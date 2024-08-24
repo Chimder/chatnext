@@ -1,6 +1,6 @@
 import Axios, { AxiosError, AxiosRequestConfig } from "axios";
 
-const url = process.env.DB_URL;
+const url = process.env.DB_BACKEND;
 export const AXIOS_INSTANCE = Axios.create({
   // baseURL: "http://localhost:4000",
   baseURL: url?.toString(),

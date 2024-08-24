@@ -1,6 +1,5 @@
 import { useRouter } from "next/router";
 import React, { createContext, useEffect, useState } from "react";
-// import { useParams } from 'react-router-dom'
 
 export type WebsocketMessage = {
   id: string;
@@ -34,7 +33,6 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
   const router = useRouter();
   const channelID = router.query.id;
   const podchannelID = router.query.podchannelId;
-  // const { podchannelID, channelID } = useParams()
   const [socket, setSocket] = useState<WebSocket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
   const [liveMessages, setLiveMessages] = useState<{
@@ -58,7 +56,6 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
     newSocket.onmessage = (event) => {
       const data: WebsocketMessage = JSON.parse(event.data);
       const key = `${data.channel_id}-${data.podchannel_id}`;
-      console.log(">>>>>>", data);
 
       if (data.event === "message") {
         setLiveMessages((prev) => ({
@@ -84,11 +81,10 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const sendJoinUser = (channelID: string) => {
     if (socket) {
-      socket?.send(
+      socket.send(
         JSON.stringify({
           event: "join_podchannel",
           channel_id: Number(channelID),
-          // podchannel_id: Number(podchannelID),
         })
       );
     }

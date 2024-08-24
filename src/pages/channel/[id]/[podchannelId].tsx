@@ -18,9 +18,9 @@ export default function PodChannel({}: Props) {
     enabled: !!channelID,
   });
   return (
-      <section className="flex h-[100vh] flex-grow pl-20">
+      <main className="flex h-[100vh] flex-grow pl-20">
         <PodChannelList data={podchannels} />
         <Chat />
-      </section>
+      </main>
   );
 }

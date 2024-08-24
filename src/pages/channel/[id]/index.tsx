@@ -17,7 +17,6 @@ export default function Channel() {
     refetchOnWindowFocus: false,
     retry: 0,
   });
-  console.log("PODDD", podchannels);
 
   return (
     <section className="flex h-[100vh] flex-grow pl-20">

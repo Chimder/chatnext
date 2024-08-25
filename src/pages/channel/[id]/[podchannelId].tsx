@@ -4,7 +4,6 @@ import { useQuery } from "@tanstack/react-query";
 import Chat from "@/components/Chat";
 import PodChannelList from "@/components/PodChannelList";
 import { useRouter } from "next/router";
-import { WebSocketProvider } from "@/components/WebSocketProvider";
 
 type Props = {};
 
@@ -18,7 +17,7 @@ export default function PodChannel({}: Props) {
     enabled: !!channelID,
   });
   return (
-      <main className="flex h-[100vh] flex-grow pl-20">
+      <main className="flex h-[100vh] overflow-y-hidden flex-grow pl-24">
         <PodChannelList data={podchannels} />
         <Chat />
       </main>

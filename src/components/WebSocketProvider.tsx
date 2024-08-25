@@ -1,5 +1,7 @@
 import { useRouter } from "next/router";
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useState } from "react";
+import useWebSocket, { ReadyState } from "react-use-websocket";
+import { SendJsonMessage } from "react-use-websocket/dist/lib/types";
 
 export type WebsocketMessage = {
   id: string;
@@ -12,95 +14,95 @@ export type WebsocketMessage = {
 };
 
 interface WebSocketContextType {
-  socket: WebSocket | null;
   isConnected: boolean;
-  sendMessage: (message: string) => void;
+  sendJsonMessage: SendJsonMessage;
   liveMessages: { [key: string]: WebsocketMessage[] };
   sendJoinUser: (channelID: string) => void;
+  markPodchannelAsVisited: (podchannelID: number) => void;
 }
 
 export const WebSocketContext = createContext<WebSocketContextType>({
-  socket: null,
   isConnected: false,
-  sendMessage: () => {},
+  sendJsonMessage: () => {},
   liveMessages: {},
   sendJoinUser: () => {},
+  markPodchannelAsVisited: () => {},
 });
 
 export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const router = useRouter();
-  const channelID = router.query.id;
-  const podchannelID = router.query.podchannelId;
-  const [socket, setSocket] = useState<WebSocket | null>(null);
-  const [isConnected, setIsConnected] = useState(false);
+  // const channelID = router.query.id;
+  // const podchannelID = router.query.podchannelId;
   const [liveMessages, setLiveMessages] = useState<{
     [key: string]: WebsocketMessage[];
   }>({});
-
-  console.log("LIve", liveMessages);
-  useEffect(() => {
-    const key = `${channelID}-${podchannelID}`;
-    if (!liveMessages[key]) {
-      setLiveMessages((prev) => ({ ...prev, [key]: [] }));
-    }
-  }, [channelID, podchannelID]);
+  const [visitedPodchannel, setVisitedPodchannels] = useState<Set<number>>();
+  console.log("VISIT", visitedPodchannel);
 
   const url = process.env.NEXT_PUBLIC_DB_URL;
-  useEffect(() => {
-    const websocketUrl = url?.replace(/^http/, "ws");
-    const newSocket = new WebSocket(`${websocketUrl}/ws`);
-    newSocket.onopen = () => {
-      setIsConnected(true);
-    };
+  const websocketUrl = url?.replace(/^http/, "ws");
 
-    newSocket.onmessage = (event) => {
-      const data: WebsocketMessage = JSON.parse(event.data);
-      const key = `${data.channel_id}-${data.podchannel_id}`;
+  const { sendJsonMessage, readyState, lastMessage, sendMessage } =
+    useWebSocket(`${websocketUrl}/ws`, {
+      onOpen: () => {
+        console.log("WebSocket connection established.");
+      },
+      share: true,
+      retryOnError: true,
+      shouldReconnect: () => true,
 
-      if (data.event === "message") {
-        setLiveMessages((prev) => ({
-          ...prev,
-          [key]: [...(prev[key] || []), data],
-        }));
-      }
-    };
+      onMessage: (event) => {
+        const data: WebsocketMessage = JSON.parse(event.data);
+        const key = `${data.channel_id}-${data.podchannel_id}`;
 
-    newSocket.onerror = (error) => {
-      console.error("ERROR WebSocket:", error);
-    };
-
-    newSocket.onclose = () => {
-      setIsConnected(false);
-    };
-
-    setSocket(newSocket);
-    return () => {
-      newSocket.close();
-    };
-  }, []);
+        if (data.event === "message") {
+          if (visitedPodchannel?.has(data.podchannel_id)) {
+            setLiveMessages((prev) => ({
+              ...prev,
+              [key]: [...(prev[key] || []), data],
+            }));
+          }
+        }
+      },
+      onError: (error) => {
+        console.error("ERROR WebSocket:", error);
+      },
+      onClose: () => {
+        console.log("WebSocket connection closed.");
+      },
+    });
 
   const sendJoinUser = (channelID: string) => {
-    if (socket) {
-      socket?.send(
-        JSON.stringify({
-          event: "join_podchannel",
-          channel_id: Number(channelID),
-        })
-      );
-    }
+    sendJsonMessage({
+      event: "join_podchannel",
+      channel_id: Number(channelID),
+    });
   };
 
-  const sendMessage = (message: string) => {
-    if (socket) {
-      socket.send(message);
-    }
+  const isConnected = readyState === ReadyState.OPEN;
+  const markPodchannelAsVisited = (podchannelID: number) => {
+    setVisitedPodchannels((prev) => new Set(prev).add(podchannelID));
   };
+
+  // const connectionStatus = {
+  //   [ReadyState.CONNECTING]: "Connecting",
+  //   [ReadyState.OPEN]: "Open",
+  //   [ReadyState.CLOSING]: "Closing",
+  //   [ReadyState.CLOSED]: "Closed",
+  //   [ReadyState.UNINSTANTIATED]: "Uninstantiated",
+  // }[readyState];
 
   return (
     <WebSocketContext.Provider
-      value={{ socket, isConnected, sendMessage, liveMessages, sendJoinUser }}
+      value={{
+        isConnected,
+        sendJsonMessage,
+        liveMessages,
+        sendJoinUser,
+        markPodchannelAsVisited,
+      }}
     >
       {children}
     </WebSocketContext.Provider>

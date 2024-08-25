@@ -12,15 +12,14 @@ import { useRouter } from "next/router";
 
 const Chat: React.FC = () => {
   const {
-    socket,
     isConnected,
-    sendMessage: sendWebSocketMessage,
     liveMessages,
+    sendJsonMessage,
+    markPodchannelAsVisited,
   } = useContext(WebSocketContext);
   const param = useRouter();
   const channelID = param.query.id;
   const podchannelID = param.query.podchannelId;
-  // const { podchannelID, channelID } = useParams()
   const [inputValue, setInputValue] = useState<string>("");
 
   const chatContainerRef = useRef<HTMLUListElement>(null);
@@ -34,6 +33,12 @@ const Chat: React.FC = () => {
         chatContainerRef.current.scrollHeight;
     }
   };
+
+  useEffect(() => {
+    if (podchannelID) {
+      markPodchannelAsVisited(Number(podchannelID));
+    }
+  }, [podchannelID]);
 
   const fetchMessages = async ({ pageParam = 1 }) => {
     const response = await getPodchannelMessage({
@@ -68,14 +73,13 @@ const Chat: React.FC = () => {
       const allMessages = data.pages.flat();
       const liveMessagesForCurrentChannel = liveMessages[key] || [];
 
-      const mergedMessages = [
-        ...allMessages,
-        ...liveMessagesForCurrentChannel,
-      ].sort(
-        (a, b) =>
-          new Date(a?.created_at!).getTime() -
-          new Date(b?.created_at!).getTime()
-      );
+      const mergedMessages = [...allMessages, ...liveMessagesForCurrentChannel]
+        .sort(
+          (a, b) =>
+            new Date(a?.created_at!).getTime() -
+            new Date(b?.created_at!).getTime()
+        )
+        .filter((m) => m !== null);
       return mergedMessages;
     },
   });
@@ -92,8 +96,8 @@ const Chat: React.FC = () => {
   }, [messages]);
 
   const sendMessage = () => {
-    if (socket && inputValue.trim() !== "" && podchannelID) {
-      const message = JSON.stringify({
+    if (isConnected && inputValue.trim() !== "" && podchannelID) {
+      sendJsonMessage({
         event: "message",
         message_id: uuidv4(),
         message: inputValue,
@@ -101,7 +105,6 @@ const Chat: React.FC = () => {
         channel_id: Number(channelID),
         podchannel_id: Number(podchannelID),
       });
-      sendWebSocketMessage(message);
       setInputValue("");
       setTimeout(() => {
         scrollToBottom();
@@ -122,11 +125,10 @@ const Chat: React.FC = () => {
     e.target.style.height = `${e.target.scrollHeight}px`;
   };
 
-  console.log(">>>>>>", messages);
   return (
-    <div className="flex flex-grow flex-col justify-between overflow-y-hidden">
+    <div className="flex h-[100vh] flex-grow flex-col justify-between overflow-y-hidden">
       {isFetching && !isFetchingNextPage ? (
-        <div className="h-[100vh] space-y-4 overflow-y-auto px-4 pb-4">
+        <div className="relative px-4 pb-4">
           {Array.from({ length: 20 }, (_, index) => (
             <Skeleton
               key={`skeleton-${index}`}
@@ -144,7 +146,7 @@ const Chat: React.FC = () => {
               <div className="my-4 pt-1 flex justify-center">
                 <Button
                   onClick={() => fetchNextPage()}
-                  className="rounded bg-blue-500 px-4 py-2 text-white"
+                  className="rounded bg-red-950 px-4 py-2 text-white"
                   disabled={isFetchingNextPage}
                 >
                   {isFetchingNextPage ? "load..." : "load old"}
@@ -152,26 +154,25 @@ const Chat: React.FC = () => {
               </div>
             )}
 
-            {messages?.filter((message) => message !== null).length === 0 ? (
+            {messages?.length === 0 ? (
               <h1>No messages</h1>
             ) : (
-              messages
-                ?.filter((message) => message !== null)
-                .map((message) => (
-                  <li
-                    key={`${message?.id}${message?.created_at}`}
-                    className="mb-2 flex items-center justify-between bg-slate-600 p-4"
-                  >
-                    <p>{message?.message}</p>
-                    <span className="self-start text-xs text-gray-400">
-                      {message &&
-                        new Date(message?.created_at!).toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                    </span>
-                  </li>
-                ))
+              messages &&
+              messages.map((message) => (
+                <li
+                  key={`${message?.id}${message?.created_at}`}
+                  className="mb-2 flex items-center justify-between border-2 border-red-400 p-4"
+                >
+                  <p>{message?.message}</p>
+                  <span className="self-start text-xs">
+                    {message &&
+                      new Date(message?.created_at!).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                  </span>
+                </li>
+              ))
             )}
           </ul>
         </>
@@ -182,7 +183,7 @@ const Chat: React.FC = () => {
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
           placeholder="Enter message"
-          className="mb-2 mr-4 w-full rounded border p-2"
+          className="mb-2 mr-4 w-full border border-transparent rounded p-2 bg-gray-200 text-base placeholder-shown:border-red-800 focus:border-red-800 focus:outline-none"
           style={{ resize: "none", overflow: "auto", minHeight: "40px" }}
         />
       </div>

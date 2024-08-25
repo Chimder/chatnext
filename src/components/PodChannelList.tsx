@@ -14,7 +14,7 @@ export default function PodChannelList({ data }: Props) {
   const podchannelID = router.query.podchannelId;
 
   return (
-    <div className="h-full w-64 overflow-y-auto bg-gray-700 p-4">
+    <div className="h-full w-64 overflow-y-auto p-4 border-r-2 border-red-400">
       <ul className="flex flex-col gap-2">
         {data &&
           data.map((podchannel) => (
@@ -23,7 +23,7 @@ export default function PodChannelList({ data }: Props) {
               href={`/channel/${channelID}/${podchannel.id}`}
             >
               <Button
-                className={`w-full text-black rounded px-4 py-2 ${podchannelID == podchannel.id ? "bg-blue-500" : "bg-white"}`}
+                className={`w-full text-white rounded px-4 py-2 ${podchannelID == podchannel.id ? "bg-red-950" : "bg-gray-200 text-black hover:bg-red-950 hover:text-white"}`}
               >
                 {podchannel.name}
               </Button>

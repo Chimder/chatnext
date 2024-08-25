@@ -19,7 +19,7 @@ export default function Channel() {
   });
 
   return (
-    <section className="flex h-[100vh] flex-grow pl-20">
+    <section className="flex h-[100vh] overflow-y-hidden flex-grow pl-24">
       <PodChannelList data={podchannels} />
       <div>WELCOME</div>
     </section>

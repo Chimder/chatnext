@@ -14,7 +14,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         disableTransitionOnChange
       >
         <WebSocketProvider>
-          <main>{children}</main>
+          <main className="overflow-y-hidden h-[100vh]">{children}</main>
         </WebSocketProvider>
       </ThemeProvider>
     </>

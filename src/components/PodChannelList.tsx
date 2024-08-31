@@ -2,6 +2,7 @@ import { QueriesPodchannel } from "@/shared/swagger/generated";
 import { Button } from "./ui/button";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { Skeleton } from "./ui/skeleton";
 
 interface Props {
   data?: QueriesPodchannel[];
@@ -14,9 +15,11 @@ export default function PodChannelList({ data }: Props) {
   const podchannelID = router.query.podchannelId;
 
   return (
-    <div className="h-full w-64 overflow-y-auto p-4 border-r-2 border-red-400">
+    <div className="h-full w-64 overflow-y-auto  border-r-2 border-red-400">
       <ul className="flex flex-col gap-2">
-        {data &&
+        {!data ? (
+          <Skeleton className="h-[100vh] w-full animate-pulse bg-slate-300 duration-700" />
+        ) : (
           data.map((podchannel) => (
             <Link
               key={podchannel.id}
@@ -28,7 +31,8 @@ export default function PodChannelList({ data }: Props) {
                 {podchannel.name}
               </Button>
             </Link>
-          ))}
+          ))
+        )}
       </ul>
     </div>
   );

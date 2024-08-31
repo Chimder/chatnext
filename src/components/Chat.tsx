@@ -4,11 +4,12 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { v4 as uuidv4 } from "uuid";
 
 import { WebSocketContext } from "@/components/WebSocketProvider";
-
+import { z } from "zod";
 import { Skeleton } from "./ui/skeleton";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import { useRouter } from "next/router";
+import toast from "react-hot-toast";
 
 const Chat: React.FC = () => {
   const {
@@ -95,20 +96,34 @@ const Chat: React.FC = () => {
     }
   }, [messages]);
 
+  const validMessage = z
+    .string()
+    .min(1, { message: "Message cannot be empty" });
+
   const sendMessage = () => {
-    if (isConnected && inputValue.trim() !== "" && podchannelID) {
-      sendJsonMessage({
-        event: "message",
-        message_id: uuidv4(),
-        message: inputValue,
-        created_at: new Date().toISOString(),
-        channel_id: Number(channelID),
-        podchannel_id: Number(podchannelID),
-      });
-      setInputValue("");
-      setTimeout(() => {
-        scrollToBottom();
-      }, 300);
+    try {
+      validMessage.parse(inputValue);
+      if (isConnected && inputValue.trim() !== "" && podchannelID) {
+        sendJsonMessage({
+          event: "message",
+          message_id: uuidv4(),
+          message: inputValue,
+          created_at: new Date().toISOString(),
+          channel_id: Number(channelID),
+          podchannel_id: Number(podchannelID),
+        });
+        setInputValue("");
+        setTimeout(() => {
+          scrollToBottom();
+        }, 300);
+      }
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        toast.error(`${error.errors[0].code}: ${error.errors[0].message}`, {
+          position: "top-center",
+          duration: 2000,
+        });
+      }
     }
   };
 

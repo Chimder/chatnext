@@ -11,7 +11,7 @@ import { Button } from "./ui/button";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 
-const Chat: React.FC = () => {
+export default function Chat() {
   const {
     isConnected,
     liveMessages,
@@ -206,4 +206,3 @@ const Chat: React.FC = () => {
   );
 };
 
-export default Chat;

@@ -1,4 +1,3 @@
-import { useRouter } from "next/router";
 import React, { createContext, useState } from "react";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 import { SendJsonMessage } from "react-use-websocket/dist/lib/types";
@@ -32,14 +31,11 @@ export const WebSocketContext = createContext<WebSocketContextType>({
 export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const router = useRouter();
-  // const channelID = router.query.id;
-  // const podchannelID = router.query.podchannelId;
+  // const router = useRouter();
   const [liveMessages, setLiveMessages] = useState<{
     [key: string]: WebsocketMessage[];
   }>({});
   const [visitedPodchannel, setVisitedPodchannels] = useState<Set<number>>();
-  console.log("VISIT", visitedPodchannel);
 
   const url = process.env.NEXT_PUBLIC_DB_URL;
   const websocketUrl = url?.replace(/^http/, "ws");

@@ -4,7 +4,7 @@ const nextConfig = {
   experimental: {
     reactCompiler: true,
   },
-  reactStrictMode: false,
+  reactStrictMode: true,
 };
 
 // if (process.env.NODE_ENV === "development") {

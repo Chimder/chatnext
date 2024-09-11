@@ -1,10 +1,17 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, {
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { getPodchannelMessage } from "@/shared/swagger/generated";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { v4 as uuidv4 } from "uuid";
 
 import { WebSocketContext } from "@/components/WebSocketProvider";
 import { z } from "zod";
+import s from "./chatx.module.scss";
 import { Skeleton } from "./ui/skeleton";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
@@ -85,13 +92,12 @@ export default function Chat() {
     },
   });
 
-  useEffect(() => {
-    if (initialLoadRef.current && messages) {
+  useLayoutEffect(() => {
+    if (initialLoadRef.current && messages && chatContainerRef.current) {
       const timeoutId = setTimeout(() => {
         scrollToBottom();
         initialLoadRef.current = false;
-      }, 300);
-
+      }, 100);
       return () => clearTimeout(timeoutId);
     }
   }, [messages]);
@@ -141,7 +147,7 @@ export default function Chat() {
   };
 
   return (
-    <div className="flex h-[100vh] flex-grow flex-col justify-between overflow-y-hidden">
+    <section className={s.chat}>
       {isFetching && !isFetchingNextPage ? (
         <div className="relative px-4 pb-4">
           {Array.from({ length: 20 }, (_, index) => (
@@ -202,7 +208,6 @@ export default function Chat() {
           style={{ resize: "none", overflow: "auto", minHeight: "40px" }}
         />
       </div>
-    </div>
+    </section>
   );
-};
-
+}

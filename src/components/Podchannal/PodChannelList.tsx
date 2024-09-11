@@ -1,8 +1,9 @@
 import { QueriesPodchannel } from "@/shared/swagger/generated";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { Skeleton } from "./ui/skeleton";
+import { Skeleton } from "../ui/skeleton";
+import s from "./podchannelx.module.scss";
 
 interface Props {
   data?: QueriesPodchannel[];
@@ -15,25 +16,31 @@ export default function PodChannelList({ data }: Props) {
   const podchannelID = router.query.podchannelId;
 
   return (
-    <div className="h-full w-64 overflow-y-auto  border-r-2 border-red-400">
-      <ul className="flex flex-col gap-2">
-        {!data ? (
+    <section className={s.sideBar}>
+      <ul className={s.scroller}>
+        <div>
+          <img src="/img/sport2.jpg" alt="" />
+        </div>
+        <div className={s.separator}></div>
+
+        {/* {!data ? (
           <Skeleton className="h-[100vh] w-full animate-pulse bg-slate-300 duration-700" />
-        ) : (
+        ) : ( */}
+        {data &&
           data.map((podchannel) => (
             <Link
               key={podchannel.id}
               href={`/channel/${channelID}/${podchannel.id}`}
             >
-              <Button
+              {/* <Button
                 className={`w-full text-white rounded px-4 py-2 ${podchannelID == podchannel.id ? "bg-red-950" : "bg-gray-200 text-black hover:bg-red-950 hover:text-white"}`}
               >
                 {podchannel.name}
-              </Button>
+              </Button> */}
             </Link>
-          ))
-        )}
+          ))}
+        {/* // )} */}
       </ul>
-    </div>
+    </section>
   );
 }

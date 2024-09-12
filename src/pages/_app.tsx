@@ -1,11 +1,12 @@
-import Layout from "@/components/Layout";
+import Layout from "@/components/Layouts/Layout";
 import Providers from "@/components/providers";
 import "@/styles/index.scss";
+import "@radix-ui/themes/styles.css";
+
 import { QueryClient } from "@tanstack/react-query";
 import { NextPage } from "next";
 import type { AppProps } from "next/app";
 import { ReactElement, ReactNode } from "react";
-import { ggsans } from "@/shared/lib/customFonts";
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;

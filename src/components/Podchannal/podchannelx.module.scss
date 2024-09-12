@@ -1,14 +1,10 @@
 .sideBar {
-  position: absolute;
-  left: 72px;
   display: flex;
+  flex: 0 0 auto;
   flex-direction: column;
-  width: 250px;
-  height: 100%;
-  padding: 0;
-  padding-right: 8px;
-  margin: 0;
-  overflow-x: hidden;
+  width: 240px;
+  min-height: 0;
+  overflow: hidden;
   background-color: var(--bg-navbar);
 
   h1 {

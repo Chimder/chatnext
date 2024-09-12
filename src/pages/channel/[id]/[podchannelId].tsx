@@ -2,6 +2,7 @@ import PodChannelList from "@/components/Podchannal/PodChannelList";
 import { useRouter } from "next/router";
 import { usePodchannelList } from "@/hooks/query/podchannel";
 import Chat from "@/components/Chat/Chat";
+import s from "./podchannel.module.scss";
 
 type Props = {};
 
@@ -12,9 +13,11 @@ export default function PodChannel({}: Props) {
   const { data: podchannels } = usePodchannelList(channelID as string);
 
   return (
-    <main className="flex h-[100vh] overflow-y-hidden flex-grow pl-24">
-      <PodChannelList data={podchannels} />
-      <Chat />
-    </main>
+    <section className={s.initWrap}>
+      <div className={s.init}>
+        <PodChannelList data={podchannels} />
+        <Chat />
+      </div>
+    </section>
   );
 }

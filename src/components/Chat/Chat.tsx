@@ -10,10 +10,11 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { v4 as uuidv4 } from "uuid";
 
 import { WebSocketContext } from "@/components/WebSocketProvider";
-// import { z } from "zod";
+import { z } from "zod";
 import s from "./chatx.module.scss";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
+import { Skeleton, TextArea } from "@radix-ui/themes";
 
 export default function Chat() {
   const {
@@ -145,16 +146,10 @@ export default function Chat() {
 
   return (
     <section className={s.chat}>
-      {isFetching && !isFetchingNextPage ? (
-        <div>
-          {Array.from({ length: 20 }, (_, index) => (
-            <div key={`skeleton-${index}`}>load</div>
-            //  {
-            //    <Skeleton
-            //      key={`skeleton-${index}`}
-            //       className="mb-2 bg-slate-300 p-8"
-            //     />
-            //  }
+      {!isFetching && !isFetchingNextPage ? (
+        <div className={s.chatSkeletonWrap}>
+          {Array.from({ length: 16 }, (_, index) => (
+            <Skeleton key={`skeleton-${index}`} className={s.chatSkeleton} />
           ))}
         </div>
       ) : (
@@ -195,15 +190,13 @@ export default function Chat() {
         </>
       )}
       <div className={s.textArea}>
-        <textarea />
-        {/* <Textarea
+        <TextArea
           value={inputValue}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
           placeholder="Enter message"
-          className="mb-2 mr-4 w-full border border-transparent rounded p-2 bg-gray-200 text-base placeholder-shown:border-red-800 focus:border-red-800 focus:outline-none"
-          style={{ resize: "none", overflow: "auto", minHeight: "40px" }}
-        /> */}
+          className={s.input}
+        />
       </div>
     </section>
   );

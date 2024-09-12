@@ -20,9 +20,6 @@ export default function PodChannelList({ data }: Props) {
       <h1>Channel</h1>
       <div className={s.separator}></div>
       <ul className={s.scroller}>
-        {/* {!data ? (
-          <Skeleton className="h-[100vh] w-full animate-pulse bg-slate-300 duration-700" />
-        ) : ( */}
         {data &&
           data.map((podchannel) => (
             <Link
@@ -41,7 +38,6 @@ export default function PodChannelList({ data }: Props) {
               </div>
             </Link>
           ))}
-        {/* // )} */}
       </ul>
     </section>
   );

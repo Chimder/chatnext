@@ -7,16 +7,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <NavBar />
-      {/* <ThemeProvider
-        attribute="class"
-        defaultTheme="system"
-        enableSystem
-        disableTransitionOnChange
-      > */}
         <WebSocketProvider>
           <main className="overflow-y-hidden h-[100vh]">{children}</main>
         </WebSocketProvider>
-      {/* </ThemeProvider> */}
     </>
   );
 }

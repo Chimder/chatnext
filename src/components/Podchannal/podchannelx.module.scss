@@ -5,18 +5,76 @@
   flex-direction: column;
   width: 250px;
   height: 100%;
+  padding: 0;
+  padding-right: 8px;
+  margin: 0;
   overflow-x: hidden;
   background-color: var(--bg-navbar);
+
+  h1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 60px;
+    color: white;
+  }
+}
+
+.logoUpdate {
+  display: flex;
+  width: 20px;
+  height: 20px;
+  padding-left: 4px;
+  fill: var(--logo-accent);
+
+  span {
+    color: white;
+  }
 }
 
 .scroller {
   padding: 0;
+  margin: 0;
 }
 
 .separator {
-  width: 100%;
+  display: flex;
+  justify-content: center;
+  width: 90%;
   height: 1px;
-  margin-top: 20px;
-  margin-left: 8px;
+  margin: 20px 12px;
   background-color: var(--background-accent);
+}
+
+.podchannelWrap {
+  display: flex;
+  width: 100%;
+  padding: 2px 0;
+  text-decoration: none;
+}
+
+.podchannelList {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  width: 100%;
+  padding: 7px 9px;
+  margin-left: 8px;
+  cursor: pointer;
+  border-color: var(--bg-navbar);
+  border-radius: 6px;
+
+  &:hover {
+    background-color: var(--background-accent);
+  }
+
+  &.active {
+    background-color: var(--background-accent);
+  }
+
+  span {
+    padding-left: 6px;
+    color: wheat;
+    text-decoration: none;
+  }
 }

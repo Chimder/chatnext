@@ -1,7 +1,7 @@
-import Chat from "@/components/Chat";
 import PodChannelList from "@/components/Podchannal/PodChannelList";
 import { useRouter } from "next/router";
 import { usePodchannelList } from "@/hooks/query/podchannel";
+import Chat from "@/components/Chat/Chat";
 
 type Props = {};
 

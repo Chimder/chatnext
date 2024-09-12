@@ -12,9 +12,9 @@ export default function NavBar() {
 
   return (
     <nav className={s.navBar}>
-      <div className={s.mainLogo}>
+      {/* <div className={s.mainLogo}>
         <Icon.DiscordLogo />
-      </div>
+      </div> */}
       <div className={s.separatorWrap}>
         <div className={s.separator}></div>
       </div>

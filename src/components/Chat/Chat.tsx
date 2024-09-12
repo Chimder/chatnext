@@ -10,11 +10,8 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { v4 as uuidv4 } from "uuid";
 
 import { WebSocketContext } from "@/components/WebSocketProvider";
-import { z } from "zod";
+// import { z } from "zod";
 import s from "./chatx.module.scss";
-import { Skeleton } from "./ui/skeleton";
-import { Textarea } from "./ui/textarea";
-import { Button } from "./ui/button";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
 
@@ -149,29 +146,28 @@ export default function Chat() {
   return (
     <section className={s.chat}>
       {isFetching && !isFetchingNextPage ? (
-        <div className="relative px-4 pb-4">
+        <div>
           {Array.from({ length: 20 }, (_, index) => (
-            <Skeleton
-              key={`skeleton-${index}`}
-              className="mb-2 bg-slate-300 p-8"
-            />
+            <div key={`skeleton-${index}`}>load</div>
+            //  {
+            //    <Skeleton
+            //      key={`skeleton-${index}`}
+            //       className="mb-2 bg-slate-300 p-8"
+            //     />
+            //  }
           ))}
         </div>
       ) : (
         <>
-          <ul
-            ref={chatContainerRef}
-            className="h-[100vh] space-y-4 overflow-y-auto px-4 pb-4"
-          >
+          <ul ref={chatContainerRef} className={s.chatUl}>
             {hasNextPage && (
-              <div className="my-4 pt-1 flex justify-center">
-                <Button
+              <div className={s.hasNextButt}>
+                <button
                   onClick={() => fetchNextPage()}
-                  className="rounded bg-red-950 px-4 py-2 text-white"
                   disabled={isFetchingNextPage}
                 >
                   {isFetchingNextPage ? "load..." : "load old"}
-                </Button>
+                </button>
               </div>
             )}
 
@@ -182,10 +178,10 @@ export default function Chat() {
               messages.map((message) => (
                 <li
                   key={`${message?.id}${message?.created_at}`}
-                  className="mb-2 flex items-center justify-between border-2 border-red-400 p-4"
+                  className={s.message}
                 >
                   <p>{message?.message}</p>
-                  <span className="self-start text-xs">
+                  <span>
                     {message &&
                       new Date(message?.created_at!).toLocaleTimeString([], {
                         hour: "2-digit",
@@ -198,15 +194,16 @@ export default function Chat() {
           </ul>
         </>
       )}
-      <div className=" relative bottom-0 mb-20 pb-[8vh] pt-1 mx-8 ml-4 h-11 ">
-        <Textarea
+      <div className={s.textArea}>
+        <textarea />
+        {/* <Textarea
           value={inputValue}
           onChange={handleInputChange}
           onKeyDown={handleKeyDown}
           placeholder="Enter message"
           className="mb-2 mr-4 w-full border border-transparent rounded p-2 bg-gray-200 text-base placeholder-shown:border-red-800 focus:border-red-800 focus:outline-none"
           style={{ resize: "none", overflow: "auto", minHeight: "40px" }}
-        />
+        /> */}
       </div>
     </section>
   );

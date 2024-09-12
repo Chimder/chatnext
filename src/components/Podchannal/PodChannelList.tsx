@@ -1,9 +1,9 @@
 import { QueriesPodchannel } from "@/shared/swagger/generated";
-import { Button } from "../ui/button";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { Skeleton } from "../ui/skeleton";
 import s from "./podchannelx.module.scss";
+import Icon from "@/shared/assets/Icon";
+import clsx from "clsx";
 
 interface Props {
   data?: QueriesPodchannel[];
@@ -17,12 +17,9 @@ export default function PodChannelList({ data }: Props) {
 
   return (
     <section className={s.sideBar}>
+      <h1>Channel</h1>
+      <div className={s.separator}></div>
       <ul className={s.scroller}>
-        <div>
-          <img src="/img/sport2.jpg" alt="" />
-        </div>
-        <div className={s.separator}></div>
-
         {/* {!data ? (
           <Skeleton className="h-[100vh] w-full animate-pulse bg-slate-300 duration-700" />
         ) : ( */}
@@ -31,12 +28,17 @@ export default function PodChannelList({ data }: Props) {
             <Link
               key={podchannel.id}
               href={`/channel/${channelID}/${podchannel.id}`}
+              className={s.podchannelWrap}
             >
-              {/* <Button
-                className={`w-full text-white rounded px-4 py-2 ${podchannelID == podchannel.id ? "bg-red-950" : "bg-gray-200 text-black hover:bg-red-950 hover:text-white"}`}
+              <div
+                className={clsx(
+                  s.podchannelList,
+                  podchannelID == podchannel.id && s.active
+                )}
               >
-                {podchannel.name}
-              </Button> */}
+                <Icon.UpdatesLogo className={s.logoUpdate} />
+                <span> 💬・{podchannel.name}</span>
+              </div>
             </Link>
           ))}
         {/* // )} */}

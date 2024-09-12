@@ -146,7 +146,7 @@ export default function Chat() {
 
   return (
     <section className={s.chat}>
-      {!isFetching && !isFetchingNextPage ? (
+      {isFetching && !isFetchingNextPage ? (
         <div className={s.chatSkeletonWrap}>
           {Array.from({ length: 16 }, (_, index) => (
             <Skeleton key={`skeleton-${index}`} className={s.chatSkeleton} />

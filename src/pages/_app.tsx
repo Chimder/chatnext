@@ -1,5 +1,5 @@
 import Layout from "@/components/Layouts/Layout";
-import Providers from "@/components/providers";
+import Providers from "@/components/Providers/providers";
 import "@/styles/index.scss";
 import "@radix-ui/themes/styles.css";
 

@@ -14,7 +14,7 @@ import { z } from "zod";
 import s from "./chatx.module.scss";
 import { useRouter } from "next/router";
 import toast from "react-hot-toast";
-import { Skeleton, TextArea } from "@radix-ui/themes";
+import { Button, Skeleton, TextArea } from "@radix-ui/themes";
 
 export default function Chat() {
   const {
@@ -161,7 +161,7 @@ export default function Chat() {
                   onClick={() => fetchNextPage()}
                   disabled={isFetchingNextPage}
                 >
-                  {isFetchingNextPage ? "load..." : "load old"}
+                  {isFetchingNextPage ? "Load..." : "Load Old"}
                 </button>
               </div>
             )}

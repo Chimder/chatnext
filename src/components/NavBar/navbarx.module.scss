@@ -7,8 +7,6 @@
   color: white;
   background-color: var(--primary-color);
 
-
-
   ul {
     display: flex;
     flex-direction: column;
@@ -35,8 +33,43 @@
 }
 
 .channelWrap {
+  position: relative;
   display: flex;
   padding: 0 0 10px;
+  transition: all 1s ease;
+  transform: none;
+
+  .pin {
+    position: relative;
+    top: 0;
+    left: -10px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 8px;
+    height: 48px;
+    overflow: hidden;
+    contain: layout size;
+
+    span {
+      position: absolute;
+      display: block;
+      width: 8px;
+      height: 8px;
+      margin-left: -4px;
+      background-color: white;
+      border-radius: 0 4px 4px 0;
+      opacity: 1;
+      transform: none;
+    }
+
+    &.active {
+      span {
+        width: 8px;
+        height: 40px;
+      }
+    }
+  }
 }
 
 .logo {

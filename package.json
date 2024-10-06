@@ -48,8 +48,8 @@
     "stylelint-config-recess-order": "^5.1.0",
     "stylelint-config-recommended": "^14.0.1",
     "stylelint-config-standard-scss": "^13.1.0",
-    "stylelint-order": "^6.0.4",
     "stylelint-scss": "^6.5.1",
+    "stylelint-order": "^6.0.4",
     "typescript": "^5.5.4"
   },
   "module": "index.ts",

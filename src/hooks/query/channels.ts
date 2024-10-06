@@ -9,5 +9,6 @@ export function useChannelList() {
     staleTime: 99999,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
+    retry: 0,
   });
 }

@@ -33,7 +33,6 @@
     border-radius: 4px;
 
     &:hover {
-      // background-color: var(--background-accent);
       opacity: 0.9;
     }
   }
@@ -43,6 +42,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  min-height: 60px;
   padding: 16px;
   margin-bottom: 4px;
   color: bisque;
@@ -52,8 +52,6 @@
     align-self: flex-start;
     font-size: 12px;
     line-height: 16px;
-
-    // color: wheat;
   }
 }
 
@@ -92,6 +90,7 @@
 }
 
 .chatSkeleton {
+  min-height: 60px;
   padding: 28px;
   margin-bottom: 8px;
   border-radius: 5px;
